@@ -1,0 +1,28 @@
+{
+  "name": "npm-install-scripts-sim",
+  "version": "0.1.0",
+  "description": "Harmless npm lifecycle script simulator for Runseal supply-chain demos",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "scripts/"
+  ],
+  "scripts": {
+    "preinstall": "node scripts/lifecycle.js preinstall",
+    "postinstall": "node scripts/lifecycle.js postinstall",
+    "test": "node scripts/lifecycle.js test"
+  },
+  "keywords": [
+    "runseal",
+    "supply-chain",
+    "npm",
+    "postinstall",
+    "simulation"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
