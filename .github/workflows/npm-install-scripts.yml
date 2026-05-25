@@ -1,0 +1,73 @@
+name: npm install scripts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  npm-install-scripts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Prepare demo project
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p demo/baseline demo/runseal
+          cd demo/baseline
+          npm init -y
+          cd ../runseal
+          npm init -y
+
+      - name: Baseline install allows lifecycle network
+        shell: bash
+        working-directory: demo/baseline
+        env:
+          SUPPLY_CHAIN_SIM_ENDPOINT: https://httpbin.org/post
+          SUPPLY_CHAIN_SIM_FAIL_ON_ERROR: "1"
+        run: |
+          set -euo pipefail
+          npm install @always-further/npm-install-scripts-sim@0.1.0
+
+      - name: Fetch dependencies without lifecycle scripts
+        uses: always-further/runseal@main
+        with:
+          runseal-version: source
+          run: |
+            cd demo/runseal
+            npm_config_cache=./.npm-cache npm install @always-further/npm-install-scripts-sim@0.1.0 --ignore-scripts
+          policy: |
+            fs:
+              read: ["."]
+              write: ["./demo"]
+            network:
+              mode: filtered
+              allow:
+                - registry.npmjs.org
+
+      - name: Lifecycle scripts cannot exfiltrate with network blocked
+        uses: always-further/runseal@main
+        env:
+          SUPPLY_CHAIN_SIM_ENDPOINT: https://httpbin.org/post
+          SUPPLY_CHAIN_SIM_FAIL_ON_ERROR: "1"
+        with:
+          runseal-version: source
+          run: |
+            cd demo/runseal
+            if npm_config_cache=./.npm-cache npm rebuild @always-further/npm-install-scripts-sim; then
+              echo "expected npm rebuild to fail when lifecycle script network is blocked" >&2
+              exit 1
+            fi
+            echo "runseal blocked lifecycle script network access"
+          policy: |
+            fs:
+              read: [".", "./demo"]
+              write: ["./demo"]
+            network:
+              mode: blocked
