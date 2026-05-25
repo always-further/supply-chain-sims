@@ -1,4 +1,4 @@
-# npm Install Scripts Simulator
+# @always-further/npm-install-scripts-sim
 
 This is a harmless npm package for Runseal supply-chain examples. It has
 `preinstall` and `postinstall` lifecycle scripts that simulate the behavior we
@@ -54,11 +54,24 @@ From a separate test project:
 npm install /path/to/supply-chain-sims/npm-install-scripts
 ```
 
+Or, after publishing:
+
+```bash
+npm install @always-further/npm-install-scripts-sim
+```
+
 To force lifecycle network failures to fail the install:
 
 ```bash
 SUPPLY_CHAIN_SIM_FAIL_ON_ERROR=1 \
-npm install /path/to/supply-chain-sims/npm-install-scripts
+npm install @always-further/npm-install-scripts-sim
+```
+
+## Publishing
+
+```bash
+npm whoami
+npm publish --access public
 ```
 
 ## Runseal Demo Use

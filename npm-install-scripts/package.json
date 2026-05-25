@@ -1,9 +1,12 @@
 {
-  "name": "npm-install-scripts-sim",
+  "name": "@always-further/npm-install-scripts-sim",
   "version": "0.1.0",
   "description": "Harmless npm lifecycle script simulator for Runseal supply-chain demos",
   "license": "Apache-2.0",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "commonjs",
   "main": "index.js",
   "files": [
