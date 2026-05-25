@@ -39,6 +39,7 @@ jobs:
         uses: always-further/runseal@main
         with:
           runseal-version: source
+          audit: artifact
           run: |
             cd demo/runseal
             npm_config_cache=./.npm-cache npm install @always-further/npm-install-scripts-sim@0.1.0 --ignore-scripts
